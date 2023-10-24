@@ -851,3 +851,7 @@ $config[GlueJsonApiConventionConstants::GLUE_DOMAIN] = sprintf(
 );
 
 $config[GlueStorefrontApiApplicationConstants::GLUE_STOREFRONT_CORS_ALLOW_ORIGIN] = getenv('SPRYKER_GLUE_APPLICATION_CORS_ALLOW_ORIGIN') ?: '*';
+
+$config[\Spryker\Shared\MessageBroker\MessageBrokerConstants::TENANT_IDENTIFIER] = getenv('SPRYKER_TENANT_IDENTIFIER') ?: '';
+
+$config[\Spryker\Shared\Product\ProductConstants::TENANT_IDENTIFIER] = getenv('SPRYKER_TENANT_IDENTIFIER') ?: '';
