@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d1209b7b34b44e29615e2e9461e08889",
+    "content-hash": "6de5b51173984c825a7464ff2b25b885",
     "packages": [
         {
             "name": "async-aws/core",
@@ -1576,16 +1576,16 @@
         },
         {
             "name": "justinrainbow/json-schema",
-            "version": "5.2.12",
+            "version": "v5.2.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/justinrainbow/json-schema.git",
-                "reference": "ad87d5a5ca981228e0e205c2bc7dfb8e24559b60"
+                "reference": "fbbe7e5d79f618997bc3332a6f49246036c45793"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/justinrainbow/json-schema/zipball/ad87d5a5ca981228e0e205c2bc7dfb8e24559b60",
-                "reference": "ad87d5a5ca981228e0e205c2bc7dfb8e24559b60",
+                "url": "https://api.github.com/repos/justinrainbow/json-schema/zipball/fbbe7e5d79f618997bc3332a6f49246036c45793",
+                "reference": "fbbe7e5d79f618997bc3332a6f49246036c45793",
                 "shasum": ""
             },
             "require": {
@@ -1640,9 +1640,9 @@
             ],
             "support": {
                 "issues": "https://github.com/justinrainbow/json-schema/issues",
-                "source": "https://github.com/justinrainbow/json-schema/tree/5.2.12"
+                "source": "https://github.com/justinrainbow/json-schema/tree/v5.2.13"
             },
-            "time": "2022-04-13T08:02:27+00:00"
+            "time": "2023-09-26T02:20:38+00:00"
         },
         {
             "name": "laminas/laminas-barcode",
@@ -18066,16 +18066,16 @@
         },
         {
             "name": "spryker/authorization",
-            "version": "1.3.0",
+            "version": "1.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker/authorization.git",
-                "reference": "f68b43d067e68decb4c7d54ddfd1a9c9d6bdbc8b"
+                "reference": "7e00cd7bf5432a6b57e6d4c30bc32956487b8157"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker/authorization/zipball/f68b43d067e68decb4c7d54ddfd1a9c9d6bdbc8b",
-                "reference": "f68b43d067e68decb4c7d54ddfd1a9c9d6bdbc8b",
+                "url": "https://api.github.com/repos/spryker/authorization/zipball/7e00cd7bf5432a6b57e6d4c30bc32956487b8157",
+                "reference": "7e00cd7bf5432a6b57e6d4c30bc32956487b8157",
                 "shasum": ""
             },
             "require": {
@@ -18109,9 +18109,9 @@
             ],
             "description": "Authorization module",
             "support": {
-                "source": "https://github.com/spryker/authorization/tree/1.3.0"
+                "source": "https://github.com/spryker/authorization/tree/1.4.0"
             },
-            "time": "2023-05-15T15:35:26+00:00"
+            "time": "2023-09-27T16:08:39+00:00"
         },
         {
             "name": "spryker/authorization-extension",
@@ -30387,20 +30387,20 @@
         },
         {
             "name": "spryker/documentation-generator-api-extension",
-            "version": "1.0.0",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker/documentation-generator-api-extension.git",
-                "reference": "e445e3339cec71c79458f75bfe00652474bc5f79"
+                "reference": "a2b4ba8870358bc905c2823004c9ac5c33a06171"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker/documentation-generator-api-extension/zipball/e445e3339cec71c79458f75bfe00652474bc5f79",
-                "reference": "e445e3339cec71c79458f75bfe00652474bc5f79",
+                "url": "https://api.github.com/repos/spryker/documentation-generator-api-extension/zipball/a2b4ba8870358bc905c2823004c9ac5c33a06171",
+                "reference": "a2b4ba8870358bc905c2823004c9ac5c33a06171",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.4"
+                "php": ">=8.0"
             },
             "require-dev": {
                 "spryker/code-sniffer": "*"
@@ -30422,22 +30422,22 @@
             ],
             "description": "DocumentationGeneratorApiExtension module",
             "support": {
-                "source": "https://github.com/spryker/documentation-generator-api-extension/tree/1.0.0"
+                "source": "https://github.com/spryker/documentation-generator-api-extension/tree/1.1.0"
             },
-            "time": "2022-09-28T14:47:08+00:00"
+            "time": "2023-08-30T07:54:37+00:00"
         },
         {
             "name": "spryker/documentation-generator-open-api",
-            "version": "1.3.2",
+            "version": "1.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker/documentation-generator-open-api.git",
-                "reference": "b6eda8eef2aa21bc9bf45ce84f127d67142930c9"
+                "reference": "5d0804045fed3f404edd014aada3656aff049471"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker/documentation-generator-open-api/zipball/b6eda8eef2aa21bc9bf45ce84f127d67142930c9",
-                "reference": "b6eda8eef2aa21bc9bf45ce84f127d67142930c9",
+                "url": "https://api.github.com/repos/spryker/documentation-generator-open-api/zipball/5d0804045fed3f404edd014aada3656aff049471",
+                "reference": "5d0804045fed3f404edd014aada3656aff049471",
                 "shasum": ""
             },
             "require": {
@@ -30445,6 +30445,7 @@
                 "php": ">=8.0",
                 "spryker/doctrine-inflector": "^1.0.0",
                 "spryker/documentation-generator-api-extension": "^1.0.0",
+                "spryker/documentation-generator-open-api-extension": "^1.0.0",
                 "spryker/kernel": "^3.30.0",
                 "spryker/symfony": "^3.5.0",
                 "spryker/transfer": "^3.25.0",
@@ -30471,9 +30472,50 @@
             ],
             "description": "DocumentationGeneratorOpenApi module",
             "support": {
-                "source": "https://github.com/spryker/documentation-generator-open-api/tree/1.3.2"
+                "source": "https://github.com/spryker/documentation-generator-open-api/tree/1.4.0"
             },
-            "time": "2023-01-23T13:54:44+00:00"
+            "time": "2023-07-11T13:58:55+00:00"
+        },
+        {
+            "name": "spryker/documentation-generator-open-api-extension",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spryker/documentation-generator-open-api-extension.git",
+                "reference": "fa12fc3e603301f355af1735edb59e4063f8864d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spryker/documentation-generator-open-api-extension/zipball/fa12fc3e603301f355af1735edb59e4063f8864d",
+                "reference": "fa12fc3e603301f355af1735edb59e4063f8864d",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.0"
+            },
+            "require-dev": {
+                "spryker/code-sniffer": "*"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Spryker\\": "src/Spryker/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "proprietary"
+            ],
+            "description": "DocumentationGeneratorOpenApiExtension module",
+            "support": {
+                "source": "https://github.com/spryker/documentation-generator-open-api-extension/tree/1.0.0"
+            },
+            "time": "2023-07-11T13:58:55+00:00"
         },
         {
             "name": "spryker/documentation-generator-rest-api",
@@ -32115,16 +32157,16 @@
         },
         {
             "name": "spryker/glue-backend-api-application-authorization-connector",
-            "version": "1.2.0",
+            "version": "1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker/glue-backend-api-application-authorization-connector.git",
-                "reference": "592a4c4c33365c6a8706100b28fb39c5e9495d4f"
+                "reference": "8c305a21f01b0dc8f5ecd60a4eabdab5ed04be47"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker/glue-backend-api-application-authorization-connector/zipball/592a4c4c33365c6a8706100b28fb39c5e9495d4f",
-                "reference": "592a4c4c33365c6a8706100b28fb39c5e9495d4f",
+                "url": "https://api.github.com/repos/spryker/glue-backend-api-application-authorization-connector/zipball/8c305a21f01b0dc8f5ecd60a4eabdab5ed04be47",
+                "reference": "8c305a21f01b0dc8f5ecd60a4eabdab5ed04be47",
                 "shasum": ""
             },
             "require": {
@@ -32134,7 +32176,7 @@
                 "spryker/documentation-generator-api-extension": "^1.0.0",
                 "spryker/glue-application-authorization-connector-extension": "^1.0.0",
                 "spryker/glue-application-extension": "^1.11.0",
-                "spryker/glue-backend-api-application-authorization-connector-extension": "^1.0.0",
+                "spryker/glue-backend-api-application-authorization-connector-extension": "^1.1.0",
                 "spryker/kernel": "^3.62.0",
                 "spryker/symfony": "^3.7.0",
                 "spryker/transfer": "^3.32.0"
@@ -32160,22 +32202,22 @@
             ],
             "description": "GlueBackendApiApplicationAuthorizationConnector module",
             "support": {
-                "source": "https://github.com/spryker/glue-backend-api-application-authorization-connector/tree/1.2.0"
+                "source": "https://github.com/spryker/glue-backend-api-application-authorization-connector/tree/1.3.0"
             },
-            "time": "2023-03-16T13:08:01+00:00"
+            "time": "2023-07-11T13:58:55+00:00"
         },
         {
             "name": "spryker/glue-backend-api-application-authorization-connector-extension",
-            "version": "1.0.0",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker/glue-backend-api-application-authorization-connector-extension.git",
-                "reference": "0e60a1ad5d5e17fa1bc859b0113738a71d00c323"
+                "reference": "d2305228c97772683b5d3c734b1cd2a91f50fa9d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker/glue-backend-api-application-authorization-connector-extension/zipball/0e60a1ad5d5e17fa1bc859b0113738a71d00c323",
-                "reference": "0e60a1ad5d5e17fa1bc859b0113738a71d00c323",
+                "url": "https://api.github.com/repos/spryker/glue-backend-api-application-authorization-connector-extension/zipball/d2305228c97772683b5d3c734b1cd2a91f50fa9d",
+                "reference": "d2305228c97772683b5d3c734b1cd2a91f50fa9d",
                 "shasum": ""
             },
             "require": {
@@ -32201,9 +32243,9 @@
             ],
             "description": "GlueBackendApiApplicationAuthorizationConnectorExtension module",
             "support": {
-                "source": "https://github.com/spryker/glue-backend-api-application-authorization-connector-extension/tree/1.0.0"
+                "source": "https://github.com/spryker/glue-backend-api-application-authorization-connector-extension/tree/1.1.0"
             },
-            "time": "2023-03-16T13:08:01+00:00"
+            "time": "2023-07-11T13:58:55+00:00"
         },
         {
             "name": "spryker/glue-backend-api-application-glue-json-api-convention-connector",
