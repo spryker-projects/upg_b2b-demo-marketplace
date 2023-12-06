@@ -851,3 +851,24 @@ $config[GlueJsonApiConventionConstants::GLUE_DOMAIN] = sprintf(
 );
 
 $config[GlueStorefrontApiApplicationConstants::GLUE_STOREFRONT_CORS_ALLOW_ORIGIN] = getenv('SPRYKER_GLUE_APPLICATION_CORS_ALLOW_ORIGIN') ?: '*';
+
+$config[\Spryker\Shared\MessageBroker\MessageBrokerConstants::TENANT_IDENTIFIER] = getenv('SPRYKER_TENANT_IDENTIFIER') ?: '';
+
+$config[\Spryker\Shared\MessageBroker\MessageBrokerConstants::CHANNEL_TO_RECEIVER_TRANSPORT_MAP] = [
+    'payment-events' => \Spryker\Zed\MessageBrokerAws\MessageBrokerAwsConfig::HTTP_CHANNEL_TRANSPORT,
+    'payment-method-commands' => \Spryker\Zed\MessageBrokerAws\MessageBrokerAwsConfig::HTTP_CHANNEL_TRANSPORT,
+    'asset-commands' => \Spryker\Zed\MessageBrokerAws\MessageBrokerAwsConfig::HTTP_CHANNEL_TRANSPORT,
+    'product-review-commands' => \Spryker\Zed\MessageBrokerAws\MessageBrokerAwsConfig::HTTP_CHANNEL_TRANSPORT,
+    'product-commands' => \Spryker\Zed\MessageBrokerAws\MessageBrokerAwsConfig::HTTP_CHANNEL_TRANSPORT,
+    'search-commands' => \Spryker\Zed\MessageBrokerAws\MessageBrokerAwsConfig::HTTP_CHANNEL_TRANSPORT,
+    'merchant-commands' => \Spryker\Zed\MessageBrokerAws\MessageBrokerAwsConfig::HTTP_CHANNEL_TRANSPORT,
+];
+
+$config[\Spryker\Shared\MessageBroker\MessageBrokerConstants::CHANNEL_TO_SENDER_TRANSPORT_MAP] = [
+    'payment-commands' => \Spryker\Zed\MessageBrokerAws\MessageBrokerAwsConfig::HTTP_CHANNEL_TRANSPORT,
+    'product-events' => \Spryker\Zed\MessageBrokerAws\MessageBrokerAwsConfig::HTTP_CHANNEL_TRANSPORT,
+    'order-events' => \Spryker\Zed\MessageBrokerAws\MessageBrokerAwsConfig::HTTP_CHANNEL_TRANSPORT,
+    'merchant-events' => \Spryker\Zed\MessageBrokerAws\MessageBrokerAwsConfig::HTTP_CHANNEL_TRANSPORT,
+];
+
+$config[\Spryker\Shared\Product\ProductConstants::TENANT_IDENTIFIER] = getenv('SPRYKER_TENANT_IDENTIFIER') ?: '';
