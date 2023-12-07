@@ -15,6 +15,11 @@ class PriceCartConnectorConfig extends SprykerPriceCartConnectorConfig
     /**
      * @var bool
      */
+    public const IS_ZERO_PRICE_ENABLED = false;
+
+    /**
+     * @var bool
+     */
     protected const IS_ZERO_PRICE_ENABLED_FOR_CART_ACTIONS = false;
 
     /**

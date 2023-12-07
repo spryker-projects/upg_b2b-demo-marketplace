@@ -7,11 +7,7 @@
 
 namespace Pyz\Yves\SessionAgentValidation;
 
-use Spryker\Yves\SessionRedis\Plugin\SessionAgentValidation\SessionRedisSessionAgentSaverPlugin;
-use Spryker\Yves\SessionRedis\Plugin\SessionAgentValidation\SessionRedisSessionAgentValidatorPlugin;
 use SprykerShop\Yves\SessionAgentValidation\SessionAgentValidationDependencyProvider as SprykerSessionAgentValidationDependencyProvider;
-use SprykerShop\Yves\SessionAgentValidationExtension\Dependency\Plugin\SessionAgentSaverPluginInterface;
-use SprykerShop\Yves\SessionAgentValidationExtension\Dependency\Plugin\SessionAgentValidatorPluginInterface;
 
 class SessionAgentValidationDependencyProvider extends SprykerSessionAgentValidationDependencyProvider
 {

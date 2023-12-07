@@ -64,6 +64,7 @@ class EventDispatcherDependencyProvider extends SprykerEventDispatcherDependency
             new SecurityBlockerCustomerEventDispatcherPlugin(),
             new SecurityBlockerAgentEventDispatcherPlugin(),
             new EnvironmentInfoHeaderEventDispatcherPlugin(),
+            new ProfilerRequestEventDispatcherPlugin(),
         ];
 
         if (class_exists(ProfilerRequestEventDispatcherPlugin::class)) {

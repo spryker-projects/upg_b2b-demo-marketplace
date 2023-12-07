@@ -52,8 +52,9 @@ use SprykerShop\Yves\CurrencyWidget\Widget\CurrencyWidget;
 use SprykerShop\Yves\CustomerPage\Plugin\Application\CustomerConfirmationUserCheckerApplicationPlugin;
 use SprykerShop\Yves\CustomerPage\Widget\CustomerNavigationWidget;
 use SprykerShop\Yves\CustomerReorderWidget\Plugin\CustomerPage\CustomerReorderFormWidget;
-use SprykerShop\Yves\CustomerReorderWidget\Plugin\CustomerPage\CustomerReorderItemCheckboxWidget;
 use SprykerShop\Yves\CustomerReorderWidget\Plugin\CustomerPage\CustomerReorderItemsFormWidget;
+use SprykerShop\Yves\CustomerReorderWidget\Widget\CustomerReorderBundleItemCheckboxWidget;
+use SprykerShop\Yves\CustomerReorderWidget\Widget\CustomerReorderItemCheckboxWidget as SprykerShopCustomerReorderItemCheckboxWidget;
 use SprykerShop\Yves\CustomerValidationPage\Plugin\ShopApplication\LogoutInvalidatedCustomerFilterControllerEventHandlerPlugin;
 use SprykerShop\Yves\DiscountPromotionWidget\Plugin\ShopApplication\CartDiscountPromotionProductListWidgetCacheKeyGeneratorStrategyPlugin;
 use SprykerShop\Yves\DiscountPromotionWidget\Widget\CartDiscountPromotionProductListWidget;
@@ -66,6 +67,7 @@ use SprykerShop\Yves\MerchantSalesOrderWidget\Widget\MerchantOrderReferenceForIt
 use SprykerShop\Yves\MerchantSalesReturnWidget\Plugin\MerchantSalesReturnCreateFormWidgetCacheKeyGeneratorStrategyPlugin;
 use SprykerShop\Yves\MerchantSalesReturnWidget\Widget\MerchantSalesReturnCreateFormWidget;
 use SprykerShop\Yves\MerchantSearchWidget\Widget\MerchantSearchWidget;
+use SprykerShop\Yves\MerchantWidget\Widget\MerchantMetaSchemaWidget;
 use SprykerShop\Yves\MerchantWidget\Widget\ShoppingListMerchantWidget;
 use SprykerShop\Yves\MerchantWidget\Widget\SoldByMerchantWidget;
 use SprykerShop\Yves\MoneyWidget\Widget\CurrencyIsoCodeWidget;
@@ -199,7 +201,6 @@ class ShopApplicationDependencyProvider extends SprykerShopApplicationDependency
             CurrencyWidget::class,
             CurrencyIsoCodeWidget::class,
             CustomerNavigationWidget::class,
-            CustomerReorderItemCheckboxWidget::class,
             DisplayProductAbstractReviewWidget::class,
             ProductGroupColorWidget::class,
             LanguageSwitcherWidget::class,
@@ -310,6 +311,10 @@ class ShopApplicationDependencyProvider extends SprykerShopApplicationDependency
             ProductConfigurationQuoteValidatorWidget::class,
             ProductConfigurationShoppingListItemDisplayWidget::class,
             ProductConfigurationShoppingListPageButtonWidget::class,
+            SprykerShopCustomerReorderItemCheckboxWidget::class,
+            CustomerReorderBundleItemCheckboxWidget::class,
+            MerchantMetaSchemaWidget::class,
+            new StoreSwitcherWidget(),
         ];
     }
 

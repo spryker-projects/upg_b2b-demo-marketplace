@@ -25,6 +25,9 @@ use Spryker\Zed\OmsProductOfferReservation\Communication\Plugin\Oms\ProductOffer
 use Spryker\Zed\OmsProductOfferReservation\Communication\Plugin\Oms\ProductOfferOmsReservationReaderStrategyPlugin;
 use Spryker\Zed\OmsProductOfferReservation\Communication\Plugin\Oms\ProductOfferOmsReservationWriterStrategyPlugin;
 use Spryker\Zed\OmsProductOfferReservation\Communication\Plugin\Oms\ProductOfferReservationPostSaveTerminationAwareStrategyPlugin;
+use Spryker\Zed\Payment\Communication\Plugin\Command\SendEventPaymentCancelReservationPendingPlugin as SprykerSendEventPaymentCancelReservationPendingPlugin;
+use Spryker\Zed\Payment\Communication\Plugin\Command\SendEventPaymentConfirmationPendingPlugin as SprykerSendEventPaymentConfirmationPendingPlugin;
+use Spryker\Zed\Payment\Communication\Plugin\Command\SendEventPaymentRefundPendingPlugin as SprykerSendEventPaymentRefundPendingPlugin;
 use Spryker\Zed\ProductBundle\Communication\Plugin\Oms\ProductBundleReservationPostSaveTerminationAwareStrategyPlugin;
 use Spryker\Zed\ProductOfferPackagingUnit\Communication\Plugin\Oms\ProductOfferPackagingUnitOmsReservationAggregationPlugin;
 use Spryker\Zed\ProductPackagingUnit\Communication\Plugin\Oms\ProductPackagingUnitOmsReservationAggregationPlugin;
@@ -36,6 +39,7 @@ use Spryker\Zed\SalesPayment\Communication\Plugin\Oms\SendEventPaymentRefundPend
 use Spryker\Zed\SalesReturn\Communication\Plugin\Oms\Command\StartReturnCommandPlugin;
 use Spryker\Zed\Shipment\Dependency\Plugin\Oms\ShipmentManualEventGrouperPlugin;
 use Spryker\Zed\Shipment\Dependency\Plugin\Oms\ShipmentOrderMailExpanderPlugin;
+use Spryker\Zed\WarehouseAllocation\Communication\Plugin\Oms\SalesOrderWarehouseAllocationCommandPlugin;
 
 class OmsDependencyProvider extends SprykerOmsDependencyProvider
 {
@@ -201,6 +205,10 @@ class OmsDependencyProvider extends SprykerOmsDependencyProvider
             $commandCollection->add(new SendEventPaymentCancelReservationPendingPlugin(), 'Payment/SendEventPaymentCancelReservationPending');
             $commandCollection->add(new RefundPlugin(), 'DummyPayment/Refund');
             $commandCollection->add(new SendOrderStatusChangedMessagePlugin(), 'Order/RequestProductReviews');
+            $commandCollection->add(new SprykerSendEventPaymentConfirmationPendingPlugin(), 'Payment/SendEventPaymentConfirmationPending');
+            $commandCollection->add(new SprykerSendEventPaymentRefundPendingPlugin(), 'Payment/SendEventPaymentRefundPending');
+            $commandCollection->add(new SprykerSendEventPaymentCancelReservationPendingPlugin(), 'Payment/SendEventPaymentCancelReservationPending');
+            $commandCollection->add(new SalesOrderWarehouseAllocationCommandPlugin(), 'WarehouseAllocation/WarehouseAllocate');
 
             return $commandCollection;
         });

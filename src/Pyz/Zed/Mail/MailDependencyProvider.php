@@ -57,6 +57,9 @@ class MailDependencyProvider extends SprykerMailDependencyProvider
                 ->addProvider(new SymfonyMailerProviderPlugin(), [
                     MailConfig::MAIL_TYPE_ALL,
                 ]);
+            $mailProviderCollection->addProvider(new SymfonyMailerProviderPlugin(), [
+                MailConfig::MAIL_TYPE_ALL,
+            ]);
 
             return $mailProviderCollection;
         });
