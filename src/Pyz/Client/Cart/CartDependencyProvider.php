@@ -11,6 +11,8 @@ use Spryker\Client\Cart\CartDependencyProvider as SprykerCartDependencyProvider;
 use Spryker\Client\Cart\Plugin\ProductSeparateCartChangeExpanderPlugin;
 use Spryker\Client\DiscountPromotion\Plugin\AddDiscountPromotionCartRequestExpandPlugin;
 use Spryker\Client\PersistentCart\Plugin\DatabaseQuoteStorageStrategy;
+use Spryker\Client\ProductBundle\Plugin\Cart\BundleProductQuoteItemFinderPlugin;
+use Spryker\Client\ProductBundle\Plugin\Cart\ProductBundleItemCountQuantityPlugin;
 use Spryker\Client\ProductBundle\Plugin\Cart\RemoveBundleChangeRequestExpanderPlugin;
 use Spryker\Client\ProductConfigurationCart\Plugin\Cart\ProductConfigurationCartChangeRequestExpanderPlugin;
 use Spryker\Client\ProductMeasurementUnit\Plugin\Cart\SingleItemQuantitySalesUnitCartChangeRequestExpanderPlugin;

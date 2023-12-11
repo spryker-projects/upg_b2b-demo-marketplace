@@ -7,6 +7,7 @@
 
 namespace Pyz\Zed\StoreStorage;
 
+use Pyz\Zed\Synchronization\SynchronizationConfig;
 use Spryker\Shared\CompanyUserStorage\CompanyUserStorageConfig;
 use Spryker\Shared\CustomerAccessStorage\CustomerAccessStorageConstants;
 use Spryker\Shared\GlossaryStorage\GlossaryStorageConfig;
