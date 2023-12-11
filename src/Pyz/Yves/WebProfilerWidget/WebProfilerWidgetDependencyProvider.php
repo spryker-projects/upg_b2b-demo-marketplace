@@ -46,6 +46,7 @@ class WebProfilerWidgetDependencyProvider extends SprykerWebProfilerDependencyPr
             new WebProfilerRedisDataCollectorPlugin(),
             new WebProfilerElasticsearchDataCollectorPlugin(),
             new WebProfilerZedRequestDataCollectorPlugin(),
+            new WebProfilerProfilerDataCollectorPlugin(),
         ];
 
         if (class_exists(WebProfilerProfilerDataCollectorPlugin::class)) {

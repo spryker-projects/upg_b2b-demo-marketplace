@@ -8,9 +8,7 @@
 namespace Pyz\Zed\Category;
 
 use Spryker\Zed\Category\CategoryDependencyProvider as SprykerDependencyProvider;
-use Spryker\Zed\Category\Communication\Plugin\Category\MainChildrenPropagationCategoryStoreAssignerPlugin;
 use Spryker\Zed\Category\Communication\Plugin\CategoryUrlPathPrefixUpdaterPlugin;
-use Spryker\Zed\CategoryExtension\Dependency\Plugin\CategoryStoreAssignerPluginInterface;
 use Spryker\Zed\CategoryImage\Communication\Plugin\CategoryImageSetCreatorPlugin;
 use Spryker\Zed\CategoryImage\Communication\Plugin\CategoryImageSetExpanderPlugin;
 use Spryker\Zed\CategoryImage\Communication\Plugin\CategoryImageSetUpdaterPlugin;

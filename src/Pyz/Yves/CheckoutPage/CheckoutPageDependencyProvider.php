@@ -248,4 +248,14 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
             new PaymentForeignPaymentCollectionExtenderPlugin(),
         ];
     }
+
+    /**
+     * @return array
+     */
+    public function extendPaymentMethodHandler(): array
+    {
+        return [
+            new PaymentForeignHandlerPlugin(PaymentTransfer::FOREIGN_PAYMENTS),
+        ];
+    }
 }
