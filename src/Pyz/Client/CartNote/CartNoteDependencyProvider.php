@@ -8,8 +8,6 @@
 namespace Pyz\Client\CartNote;
 
 use Spryker\Client\CartNote\CartNoteDependencyProvider as SprykerCartNoteDependencyProvider;
-use Spryker\Client\CartNoteExtension\Dependency\Plugin\QuoteItemFinderPluginInterface;
-use Spryker\Client\CartNoteProductBundleConnector\Plugin\BundleProductQuoteItemFinderPlugin;
 
 class CartNoteDependencyProvider extends SprykerCartNoteDependencyProvider
 {
@@ -18,6 +16,6 @@ class CartNoteDependencyProvider extends SprykerCartNoteDependencyProvider
      */
     protected function getQuoteItemsFinderPlugin(): QuoteItemFinderPluginInterface
     {
-        return new BundleProductQuoteItemFinderPlugin(); #CartNoteFeature
+        return new BundleProductQuoteItemFinderPlugin();
     }
 }

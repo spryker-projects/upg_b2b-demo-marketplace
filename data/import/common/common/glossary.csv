@@ -3965,3 +3965,29 @@ permission.name.SeeCompanyUsersPermissionPlugin,View company users,en_US
 permission.name.SeeCompanyUsersPermissionPlugin,Firmenbenutzer anzeigen,de_DE
 store_widget.switcher.store,Store:,en_US
 store_widget.switcher.store,Shop:,de_DE
+customer.salutation.invalid,Salutation is invalid,en_US
+customer.salutation.invalid,Anrede ist ungültig,de_DE
+customer.billing_address.salutation.invalid,Salutation is invalid,en_US
+customer.billing_address.salutation.invalid,Anrede ist ungültig,de_DE
+customer.shipping_address.salutation.invalid,Salutation is invalid,en_US
+customer.shipping_address.salutation.invalid,Anrede ist ungültig,de_DE
+security_blocker_backoffice_gui.error.account_blocked,"Warten Sie bitte %minutes% Minuten, bevor Sie es erneut versuchen.",de_DE
+security_blocker_merchant_portal_gui.error.account_blocked,"Warten Sie bitte %minutes% Minuten, bevor Sie es erneut versuchen.",de_DE
+shipment_type.name.shipment_type_delivery,Delivery,en_US
+shipment_type.name.shipment_type_delivery,Lieferung,de_DE
+shipment_type.name.shipment_type_pickup,Pickup,en_US
+shipment_type.name.shipment_type_pickup,Abholung,de_DE
+shipment_type.validation.shipment_type_entity_not_found,A delivery type entity was not found.,en_US
+shipment_type.validation.shipment_type_entity_not_found,Lieferart wurde nicht gefunden.,de_DE
+shipment_type.validation.shipment_type_key_exists,A delivery type with the same key already exists.,en_US
+shipment_type.validation.shipment_type_key_exists,Es existiert bereits eine Lieferart mit dem gleichen Schlüssel.,de_DE
+shipment_type.validation.shipment_type_key_is_not_unique,At least two delivery types in this request have the same key.,en_US
+shipment_type.validation.shipment_type_key_is_not_unique,Mindestens zwei Lieferarten in dieser Anfrage haben den gleichen Schlüssel.,de_DE
+shipment_type.validation.shipment_type_key_invalid_length,A delivery type key must have a length from %min% to %max% characters.,en_US
+shipment_type.validation.shipment_type_key_invalid_length,Der Lieferart-Schlüssel muss eine Länge von %min% bis %max% Zeichen haben.,de_DE
+shipment_type.validation.shipment_type_name_invalid_length,A delivery type name must have a length from %min% to %max% characters.,en_US
+shipment_type.validation.shipment_type_name_invalid_length,Der Lieferart-Name muss eine Länge von %min% bis %max% Zeichen haben.,de_DE
+shipment_type.validation.store_does_not_exist,A store with the name ‘%name%’ does not exist.,en_US
+shipment_type.validation.store_does_not_exist,Store mit dem Namen ‘%name%’ existiert nicht.,de_DE
+store.validation.store_not_found,Store not found,en_US
+store.validation.store_not_found,Store nicht gefunden,de_DE
