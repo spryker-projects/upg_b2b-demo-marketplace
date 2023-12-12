@@ -256,6 +256,7 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
     {
         return [
             new PaymentForeignHandlerPlugin(PaymentTransfer::FOREIGN_PAYMENTS),
+            new PaymentForeignHandlerPlugin(PaymentTransfer::FOREIGN_PAYMENTS),
         ];
     }
 }

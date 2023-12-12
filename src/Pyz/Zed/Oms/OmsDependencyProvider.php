@@ -209,6 +209,10 @@ class OmsDependencyProvider extends SprykerOmsDependencyProvider
             $commandCollection->add(new SprykerSendEventPaymentRefundPendingPlugin(), 'Payment/SendEventPaymentRefundPending');
             $commandCollection->add(new SprykerSendEventPaymentCancelReservationPendingPlugin(), 'Payment/SendEventPaymentCancelReservationPending');
             $commandCollection->add(new SalesOrderWarehouseAllocationCommandPlugin(), 'WarehouseAllocation/WarehouseAllocate');
+            $commandCollection->add(new SprykerSendEventPaymentConfirmationPendingPlugin(), 'Payment/SendEventPaymentConfirmationPending');
+            $commandCollection->add(new SprykerSendEventPaymentRefundPendingPlugin(), 'Payment/SendEventPaymentRefundPending');
+            $commandCollection->add(new SprykerSendEventPaymentCancelReservationPendingPlugin(), 'Payment/SendEventPaymentCancelReservationPending');
+            $commandCollection->add(new SalesOrderWarehouseAllocationCommandPlugin(), 'WarehouseAllocation/WarehouseAllocate');
 
             return $commandCollection;
         });
