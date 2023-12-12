@@ -327,7 +327,7 @@
     "config": {
         "preferred-install": "dist",
         "platform": {
-            "php": "8.0.9"
+            "php": "8.2.13"
         },
         "use-include-path": true,
         "sort-packages": true,
