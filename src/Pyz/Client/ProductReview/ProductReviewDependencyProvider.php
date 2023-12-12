@@ -49,6 +49,7 @@ class ProductReviewDependencyProvider extends SprykerProductReviewDependencyProv
     {
         $productReviewQueryExpanderPlugins = parent::getProductReviewsQueryExpanderPlugins();
         $productReviewQueryExpanderPlugins[] = new FilterByIdProductReviewQueryExpanderPlugin();
+        $productReviewQueryExpanderPlugins[] = new FilterByIdProductReviewQueryExpanderPlugin();
 
         return $productReviewQueryExpanderPlugins;
     }

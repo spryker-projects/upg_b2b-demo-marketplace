@@ -40,6 +40,7 @@ class WebProfilerDependencyProvider extends SprykerWebProfilerDependencyProvider
             new WebProfilerMemoryDataCollectorPlugin(),
             new WebProfilerTimeDataCollectorPlugin(),
             new WebProfilerTwigDataCollectorPlugin(),
+            new WebProfilerProfilerDataCollectorPlugin(),
         ];
 
         if (class_exists(WebProfilerProfilerDataCollectorPlugin::class)) {

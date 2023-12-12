@@ -677,11 +677,14 @@ $config[OmsConstants::ACTIVE_PROCESSES] = [
 $config[SalesConstants::PAYMENT_METHOD_STATEMACHINE_MAPPING] = [
     DummyMarketplacePaymentConfig::PAYMENT_METHOD_DUMMY_MARKETPLACE_PAYMENT_INVOICE => 'MarketplacePayment01',
     PaymentConfig::PAYMENT_FOREIGN_PROVIDER => 'ForeignPaymentB2CStateMachine01',
+    \SprykerEco\Zed\Payone\PayoneConfig::PAYMENT_METHOD_CREDIT_CARD => 'PayoneCreditCardPartialOperations',
+    \SprykerEco\Zed\Payone\PayoneConfig::PAYMENT_METHOD_INSTANT_ONLINE_TRANSFER => 'PayoneOnlineTransferPartialOperations',
 ];
 
 $config[OmsConstants::PROCESS_LOCATION] = [
     OmsConfig::DEFAULT_PROCESS_LOCATION,
     APPLICATION_ROOT_DIR . '/vendor/spryker/sales-payment/config/Zed/Oms',
+    APPLICATION_ROOT_DIR . '/vendor/spryker/payment/config/Zed/Oms',
 ];
 
 // ----------------------------------------------------------------------------
@@ -851,3 +854,28 @@ $config[GlueJsonApiConventionConstants::GLUE_DOMAIN] = sprintf(
 );
 
 $config[GlueStorefrontApiApplicationConstants::GLUE_STOREFRONT_CORS_ALLOW_ORIGIN] = getenv('SPRYKER_GLUE_APPLICATION_CORS_ALLOW_ORIGIN') ?: '*';
+
+$config[\Spryker\Shared\MessageBroker\MessageBrokerConstants::TENANT_IDENTIFIER] = getenv('SPRYKER_TENANT_IDENTIFIER') ?: '';
+
+$config[\Spryker\Shared\MessageBroker\MessageBrokerConstants::CHANNEL_TO_RECEIVER_TRANSPORT_MAP] = [
+    'payment-events' => \Spryker\Zed\MessageBrokerAws\MessageBrokerAwsConfig::HTTP_CHANNEL_TRANSPORT,
+    'payment-method-commands' => \Spryker\Zed\MessageBrokerAws\MessageBrokerAwsConfig::HTTP_CHANNEL_TRANSPORT,
+    'asset-commands' => \Spryker\Zed\MessageBrokerAws\MessageBrokerAwsConfig::HTTP_CHANNEL_TRANSPORT,
+    'product-review-commands' => \Spryker\Zed\MessageBrokerAws\MessageBrokerAwsConfig::HTTP_CHANNEL_TRANSPORT,
+    'product-commands' => \Spryker\Zed\MessageBrokerAws\MessageBrokerAwsConfig::HTTP_CHANNEL_TRANSPORT,
+    'search-commands' => \Spryker\Zed\MessageBrokerAws\MessageBrokerAwsConfig::HTTP_CHANNEL_TRANSPORT,
+    'merchant-commands' => \Spryker\Zed\MessageBrokerAws\MessageBrokerAwsConfig::HTTP_CHANNEL_TRANSPORT,
+];
+
+$config[\Spryker\Shared\MessageBroker\MessageBrokerConstants::CHANNEL_TO_SENDER_TRANSPORT_MAP] = [
+    'payment-commands' => \Spryker\Zed\MessageBrokerAws\MessageBrokerAwsConfig::HTTP_CHANNEL_TRANSPORT,
+    'product-events' => \Spryker\Zed\MessageBrokerAws\MessageBrokerAwsConfig::HTTP_CHANNEL_TRANSPORT,
+    'order-events' => \Spryker\Zed\MessageBrokerAws\MessageBrokerAwsConfig::HTTP_CHANNEL_TRANSPORT,
+    'merchant-events' => \Spryker\Zed\MessageBrokerAws\MessageBrokerAwsConfig::HTTP_CHANNEL_TRANSPORT,
+];
+
+$config[\Spryker\Shared\Product\ProductConstants::TENANT_IDENTIFIER] = getenv('SPRYKER_TENANT_IDENTIFIER') ?: '';
+
+$config[\Spryker\Shared\PropelReplicationCache\PropelReplicationCacheConstants::IS_REPLICATION_ENABLED] = (bool)$config[\Spryker\Shared\Propel\PropelConstants::ZED_DB_REPLICAS];
+
+$config[\Spryker\Shared\SecurityBlocker\SecurityBlockerConstants::SECURITY_BLOCKER_AGENT_BLOCKING_TTL] = 900;
