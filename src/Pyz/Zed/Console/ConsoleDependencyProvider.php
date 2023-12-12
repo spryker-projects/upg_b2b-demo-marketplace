@@ -497,6 +497,7 @@ class ConsoleDependencyProvider extends SprykerConsoleDependencyProvider
         $applicationPlugins[] = new TwigApplicationPlugin();
         $applicationPlugins[] = new ConsoleLocaleApplicationPlugin();
         $applicationPlugins[] = new ConsoleLocaleApplicationPlugin();
+        $applicationPlugins[] = new ConsoleLocaleApplicationPlugin();
 
         return $applicationPlugins;
     }
