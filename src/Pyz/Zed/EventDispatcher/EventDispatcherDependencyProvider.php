@@ -67,6 +67,7 @@ class EventDispatcherDependencyProvider extends SprykerEventDispatcherDependency
             new SecurityBlockerBackofficeUserEventDispatcherPlugin(),
             new SecurityBlockerMerchantPortalUserEventDispatcherPlugin(),
             new EnvironmentInfoHeaderEventDispatcherPlugin(),
+            new ProfilerRequestEventDispatcherPlugin(),
         ];
 
         if (class_exists(ProfilerRequestEventDispatcherPlugin::class)) {
@@ -111,6 +112,20 @@ class EventDispatcherDependencyProvider extends SprykerEventDispatcherDependency
             new RouterListenerEventDispatcherPlugin(),
             new ResponseListenerEventDispatcherPlugin(),
             new AutoloaderCacheEventDispatcherPlugin(),
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function getBackofficeEventDispatcherPlugins(): array
+    {
+        return [
+            new HeadersSecurityEventDispatcherPlugin(),
+            new RouterLocaleEventDispatcherPlugin(),
+            new RouterListenerEventDispatcherPlugin(),
+            new RouterSslRedirectEventDispatcherPlugin(),
+            new RequestAttributesEventDispatcherPlugin(),
         ];
     }
 }

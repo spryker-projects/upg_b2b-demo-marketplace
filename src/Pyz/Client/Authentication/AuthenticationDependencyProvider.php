@@ -21,4 +21,14 @@ class AuthenticationDependencyProvider extends SprykerAuthenticationDependencyPr
             new OauthAuthenticationServerPlugin(),
         ];
     }
+
+    /**
+     * @return array
+     */
+    public function getAuthenticationServerPlugin(): array
+    {
+        return [
+            new OauthAuthenticationServerPlugin(),
+        ];
+    }
 }
