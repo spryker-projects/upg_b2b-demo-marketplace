@@ -82,11 +82,11 @@ class MessageBrokerDependencyProvider extends SprykerMessageBrokerDependencyProv
             new AssetAddedMessageHandlerPlugin(),
             new AssetUpdatedMessageHandlerPlugin(),
             new AssetDeletedMessageHandlerPlugin(),
-            new InitializeProductExportMessageHandlerPlugin(),
             new ProductReviewAddReviewsMessageHandlerPlugin(),
             new SearchEndpointAvailableMessageHandlerPlugin(),
             new SearchEndpointRemovedMessageHandlerPlugin(),
             new MerchantExportMerchantsMessageHandlerPlugin(),
+            new Spryker\Zed\Product\Communication\Plugin\MessageBroker\ProductExportMessageHandlerPlugin(),
         ];
     }
 
@@ -98,10 +98,10 @@ class MessageBrokerDependencyProvider extends SprykerMessageBrokerDependencyProv
         return [
             new CorrelationIdMessageAttributeProviderPlugin(),
             new TimestampMessageAttributeProviderPlugin(),
-            new CurrentStoreReferenceMessageAttributeProviderPlugin(),
             new AccessTokenMessageAttributeProviderPlugin(),
             new TransactionIdMessageAttributeProviderPlugin(),
             new SessionTrackingIdMessageAttributeProviderPlugin(),
+            new Spryker\Zed\MessageBroker\Communication\Plugin\MessageBroker\TenantActorMessageAttributeProviderPlugin(),
         ];
     }
 
@@ -112,16 +112,6 @@ class MessageBrokerDependencyProvider extends SprykerMessageBrokerDependencyProv
     {
         return [
             new ValidationMiddlewarePlugin(),
-        ];
-    }
-
-    /**
-     * @return array<\Spryker\Zed\MessageBrokerExtension\Dependency\Plugin\MessageValidatorPluginInterface>
-     */
-    public function getExternalValidatorPlugins(): array
-    {
-        return [
-            new StoreReferenceMessageValidatorPlugin(),
         ];
     }
 }
