@@ -77,16 +77,15 @@ class MessageBrokerDependencyProvider extends SprykerMessageBrokerDependencyProv
             new PaymentReservationCanceledMessageHandlerPlugin(),
             new PaymentRefundedMessageHandlerPlugin(),
             new PaymentRefundFailedMessageHandlerPlugin(),
-            new PaymentMethodAddedMessageHandlerPlugin(),
-            new PaymentMethodDeletedMessageHandlerPlugin(),
             new AssetAddedMessageHandlerPlugin(),
             new AssetUpdatedMessageHandlerPlugin(),
             new AssetDeletedMessageHandlerPlugin(),
             new ProductReviewAddReviewsMessageHandlerPlugin(),
             new SearchEndpointAvailableMessageHandlerPlugin(),
             new SearchEndpointRemovedMessageHandlerPlugin(),
-            new MerchantExportMerchantsMessageHandlerPlugin(),
             new Spryker\Zed\Product\Communication\Plugin\MessageBroker\ProductExportMessageHandlerPlugin(),
+            new Spryker\Zed\Merchant\Communication\Plugin\MessageBroker\MerchantMessageHandlerPlugin(),
+            new Spryker\Zed\Payment\Communication\Plugin\MessageBroker\PaymentMethodMessageHandlerPlugin(),
         ];
     }
 
