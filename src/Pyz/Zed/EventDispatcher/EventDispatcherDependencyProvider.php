@@ -113,4 +113,17 @@ class EventDispatcherDependencyProvider extends SprykerEventDispatcherDependency
             new AutoloaderCacheEventDispatcherPlugin(),
         ];
     }
+    /**
+     * @return array
+     */
+    public function getBackofficeEventDispatcherPlugins() : array
+    {
+        return [
+            new Spryker\Zed\Application\Communication\Plugin\EventDispatcher\HeadersSecurityEventDispatcherPlugin(),
+            new Spryker\Zed\Router\Communication\Plugin\EventDispatcher\RouterLocaleEventDispatcherPlugin(),
+            new Spryker\Zed\Router\Communication\Plugin\EventDispatcher\RouterListenerEventDispatcherPlugin(),
+            new Spryker\Zed\Router\Communication\Plugin\EventDispatcher\RouterSslRedirectEventDispatcherPlugin(),
+            new Spryker\Zed\Router\Communication\Plugin\EventDispatcher\RequestAttributesEventDispatcherPlugin(),
+        ];
+    }
 }
