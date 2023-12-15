@@ -51,4 +51,14 @@ class RouterDependencyProvider extends SprykerRouterDependencyProvider
             new MerchantPortalRouterPlugin(),
         ];
     }
+    /**
+     * @return array<\Spryker\Zed\RouterExtension\Dependency\Plugin\RouterPluginInterface>
+     */
+    protected function getRouterPlugins() : array
+    {
+        return [
+            new Spryker\Zed\Router\Communication\Plugin\Router\ZedRouterPlugin(),
+            new Spryker\Zed\Router\Communication\Plugin\Router\ZedDevelopmentRouterPlugin(),
+        ];
+    }
 }

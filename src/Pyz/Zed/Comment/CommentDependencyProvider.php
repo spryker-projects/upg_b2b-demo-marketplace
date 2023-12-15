@@ -19,7 +19,6 @@ class CommentDependencyProvider extends SprykerCommentDependencyProvider
     protected function getCommentValidatorPlugins(): array
     {
         return [
-            new QuoteCommentValidatorPlugin(),
             new SharedCartCommentValidatorPlugin(),
         ];
     }
