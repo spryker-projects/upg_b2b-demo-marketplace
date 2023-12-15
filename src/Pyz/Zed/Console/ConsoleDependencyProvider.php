@@ -393,6 +393,7 @@ class ConsoleDependencyProvider extends SprykerConsoleDependencyProvider
             new MessageBrokerWorkerConsole(),
             new ScopeCacheCollectorConsole(),
             new DateTimeProductConfiguratorBuildFrontendConsole(),
+            new Spryker\Zed\Router\Communication\Plugin\Console\RouterCacheWarmUpConsole(),
         ];
 
         $propelCommands = $container->getLocator()->propel()->facade()->getConsoleCommands();
