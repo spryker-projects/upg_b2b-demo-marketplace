@@ -872,3 +872,5 @@ $config[\Spryker\Shared\MessageBroker\MessageBrokerConstants::CHANNEL_TO_SENDER_
 ];
 
 $config[\Spryker\Shared\Product\ProductConstants::TENANT_IDENTIFIER] = getenv('SPRYKER_TENANT_IDENTIFIER') ?: '';
+
+$config[\Spryker\Shared\Payment\PaymentConstants::TENANT_IDENTIFIER] = getenv('SPRYKER_TENANT_IDENTIFIER') ?: '';
