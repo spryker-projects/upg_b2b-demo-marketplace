@@ -10178,20 +10178,20 @@
         },
         {
             "name": "spryker-shop/company-page",
-            "version": "2.23.0",
+            "version": "2.24.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker-shop/company-page.git",
-                "reference": "fa6f148e5a521e9072b17653dae634e6e60d526f"
+                "reference": "4b53458b1ec511a29620a6afdf6fc60b31ebc100"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker-shop/company-page/zipball/fa6f148e5a521e9072b17653dae634e6e60d526f",
-                "reference": "fa6f148e5a521e9072b17653dae634e6e60d526f",
+                "url": "https://api.github.com/repos/spryker-shop/company-page/zipball/4b53458b1ec511a29620a6afdf6fc60b31ebc100",
+                "reference": "4b53458b1ec511a29620a6afdf6fc60b31ebc100",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.0",
+                "php": ">=8.1",
                 "spryker-shop/checkout-page-extension": "^1.0.0",
                 "spryker-shop/customer-page-extension": "^1.5.0",
                 "spryker-shop/shop-application": "^1.0.0",
@@ -10247,9 +10247,9 @@
             ],
             "description": "CompanyPage module",
             "support": {
-                "source": "https://github.com/spryker-shop/company-page/tree/2.23.0"
+                "source": "https://github.com/spryker-shop/company-page/tree/2.24.0"
             },
-            "time": "2023-06-16T12:23:11+00:00"
+            "time": "2023-12-01T13:40:05+00:00"
         },
         {
             "name": "spryker-shop/company-user-agent-widget",
@@ -25867,20 +25867,20 @@
         },
         {
             "name": "spryker/company-user",
-            "version": "2.16.1",
+            "version": "2.17.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker/company-user.git",
-                "reference": "d392c8e8bd2f9bd9c6438ee4fb55adffe7661273"
+                "reference": "a9523095a82906fa78affaee77ceec7a5580106f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker/company-user/zipball/d392c8e8bd2f9bd9c6438ee4fb55adffe7661273",
-                "reference": "d392c8e8bd2f9bd9c6438ee4fb55adffe7661273",
+                "url": "https://api.github.com/repos/spryker/company-user/zipball/a9523095a82906fa78affaee77ceec7a5580106f",
+                "reference": "a9523095a82906fa78affaee77ceec7a5580106f",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.0",
+                "php": ">=8.1",
                 "spryker/company": "^1.0.0",
                 "spryker/company-extension": "^1.0.0",
                 "spryker/company-user-extension": "^1.2.0",
@@ -25888,7 +25888,7 @@
                 "spryker/kernel": "^3.30.0",
                 "spryker/permission-extension": "^1.0.0",
                 "spryker/propel-orm": "^1.0.0",
-                "spryker/transfer": "^3.25.0",
+                "spryker/transfer": "^3.27.0",
                 "spryker/zed-request": "^3.0.0"
             },
             "require-dev": {
@@ -25919,9 +25919,9 @@
             ],
             "description": "CompanyUser module",
             "support": {
-                "source": "https://github.com/spryker/company-user/tree/2.16.1"
+                "source": "https://github.com/spryker/company-user/tree/2.17.0"
             },
-            "time": "2023-03-31T19:36:11+00:00"
+            "time": "2023-12-12T08:52:30+00:00"
         },
         {
             "name": "spryker/company-user-agent",
