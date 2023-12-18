@@ -11,6 +11,7 @@ use Spryker\Zed\Customer\CustomerConfig as SprykerCustomerConfig;
 
 class CustomerConfig extends SprykerCustomerConfig
 {
+    protected const PASSWORD_RESET_EXPIRATION_IS_ENABLED = true;
     /**
      * @var int
      */
