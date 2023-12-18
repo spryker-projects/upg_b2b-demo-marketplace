@@ -11,6 +11,7 @@ use Spryker\Zed\SecurityGui\SecurityGuiConfig as SprykerSecurityGuiConfig;
 
 class SecurityGuiConfig extends SprykerSecurityGuiConfig
 {
+    protected const IS_BACKOFFICE_USER_SECURITY_BLOCKER_ENABLED = true;
     /**
      * @var string
      */
