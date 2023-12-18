@@ -241,6 +241,7 @@
         "spryker/product-offer-availabilities-rest-api": "^1.1.0",
         "spryker/product-offer-prices-rest-api": "^2.0.1",
         "spryker/product-offer-sales-rest-api": "^1.0.1",
+        "spryker/product-offer-service-point-storage-extension": "^1.0.0",
         "spryker/product-offer-shopping-lists-rest-api": "^1.0.0",
         "spryker/product-offers-rest-api": "^1.0.0",
         "spryker/product-option-cart-connector": "^7.1.3",
