@@ -102,3 +102,5 @@ docker
 # angular
 /.angular/cache
 /.angular
+
+integrator.lock
