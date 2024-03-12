@@ -58062,20 +58062,20 @@
         },
         {
             "name": "spryker/state-machine",
-            "version": "2.18.0",
+            "version": "2.20.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker/state-machine.git",
-                "reference": "2736a095208d8837e100a00ec086091937a2e571"
+                "reference": "c14a7b53e43d223cbedd85ed2eed976041f93e28"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker/state-machine/zipball/2736a095208d8837e100a00ec086091937a2e571",
-                "reference": "2736a095208d8837e100a00ec086091937a2e571",
+                "url": "https://api.github.com/repos/spryker/state-machine/zipball/c14a7b53e43d223cbedd85ed2eed976041f93e28",
+                "reference": "c14a7b53e43d223cbedd85ed2eed976041f93e28",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.0",
+                "php": ">=8.1",
                 "spryker/acl-merchant-portal-extension": "^1.0.0",
                 "spryker/graph": "^3.0.0",
                 "spryker/kernel": "^3.30.0",
@@ -58083,6 +58083,7 @@
                 "spryker/symfony": "^3.0.0",
                 "spryker/transfer": "^3.25.0",
                 "spryker/util-network": "^1.1.0",
+                "spryker/util-sanitize-xss": "^1.1.0",
                 "spryker/util-text": "^1.1.0"
             },
             "require-dev": {
@@ -58109,9 +58110,9 @@
             ],
             "description": "StateMachine module",
             "support": {
-                "source": "https://github.com/spryker/state-machine/tree/2.18.0"
+                "source": "https://github.com/spryker/state-machine/tree/2.20.0"
             },
-            "time": "2023-07-18T10:08:54+00:00"
+            "time": "2023-11-29T09:16:52+00:00"
         },
         {
             "name": "spryker/step-engine",
