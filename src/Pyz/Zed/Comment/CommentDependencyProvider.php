@@ -8,7 +8,6 @@
 namespace Pyz\Zed\Comment;
 
 use Spryker\Zed\Comment\CommentDependencyProvider as SprykerCommentDependencyProvider;
-use Spryker\Zed\Quote\Communication\Plugins\Comment\QuoteCommentValidatorPlugin;
 use Spryker\Zed\SharedCart\Communication\Plugin\Comment\SharedCartCommentValidatorPlugin;
 
 class CommentDependencyProvider extends SprykerCommentDependencyProvider
@@ -19,7 +18,6 @@ class CommentDependencyProvider extends SprykerCommentDependencyProvider
     protected function getCommentValidatorPlugins(): array
     {
         return [
-            new QuoteCommentValidatorPlugin(),
             new SharedCartCommentValidatorPlugin(),
         ];
     }
