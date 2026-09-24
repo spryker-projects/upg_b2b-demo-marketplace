@@ -70742,21 +70742,21 @@
         },
         {
             "name": "spryker/secrets-manager-aws",
-            "version": "1.0.3",
+            "version": "1.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker/secrets-manager-aws.git",
-                "reference": "3f0f5648ff89e18352a276a68fbb4d93d7f74b7e"
+                "reference": "9fb8f55c7d562adeced7fd2f891fd7220cf6256c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker/secrets-manager-aws/zipball/3f0f5648ff89e18352a276a68fbb4d93d7f74b7e",
-                "reference": "3f0f5648ff89e18352a276a68fbb4d93d7f74b7e",
+                "url": "https://api.github.com/repos/spryker/secrets-manager-aws/zipball/9fb8f55c7d562adeced7fd2f891fd7220cf6256c",
+                "reference": "9fb8f55c7d562adeced7fd2f891fd7220cf6256c",
                 "shasum": ""
             },
             "require": {
                 "aws/aws-sdk-php": "^3.263.14",
-                "php": ">=8.2",
+                "php": ">=8.3",
                 "spryker/kernel": "^3.30.0",
                 "spryker/log": "^1.0.0 || ^2.0.0 || ^3.0.0",
                 "spryker/secrets-manager-extension": "^1.0.0",
@@ -70785,9 +70785,9 @@
             ],
             "description": "SecretsManagerAws module",
             "support": {
-                "source": "https://github.com/spryker/secrets-manager-aws/tree/1.0.3"
+                "source": "https://github.com/spryker/secrets-manager-aws/tree/1.0.4"
             },
-            "time": "2024-11-18T13:28:47+00:00"
+            "time": "2026-09-22T08:51:34+00:00"
         },
         {
             "name": "spryker/secrets-manager-extension",
