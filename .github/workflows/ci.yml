@@ -1,324 +1,624 @@
-name: B2B-MP-CI
+name: CI
 
 on:
     pull_request:
-        types: [opened, synchronize, reopened, ready_for_review]
     push:
         branches:
             - master
     workflow_dispatch:
+    schedule:
+        - cron: "0 0 * * *"
 
-# [optional for project]
-env:
-    SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-    WEEKLY_CI_SLACK_CHANNEL_ID: ${{ secrets.WEEKLY_CI_SLACK_CHANNEL_ID }}
-    JIRA_TICKET_SLACK_USER_GROUP_MAPPING: ${{ secrets.JIRA_TICKET_SLACK_USER_GROUP_MAPPING }}
-
-concurrency:
-    group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-    cancel-in-progress: true
-
-# =============================================================================
-# Jobs below (until the "REMOVE FOR PROJECT" banner) are applicable for project
-# development. Everything under that banner is product-delivery only and should
-# be removed when this workflow is adopted as the project CI.
-# =============================================================================
 jobs:
-    # [project applicable] Credential scan.
-    scan-credentials:
-        name: "Scan for Credentials"
-        if: ${{ !(github.event_name == 'push' && github.ref == 'refs/heads/master') }}
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v4
-              with:
-                  fetch-depth: 0
-
-            - name: Run TruffleHog OSS
-              uses: trufflesecurity/trufflehog@v3.90.8
-              with:
-                  extra_args: --log-level=2 --results=verified
-    # [project applicable] Static analysis (sniffers, phpmd, phpstan, evaluator, speccy).
     validation:
-        name: "Static analysis"
-        if: ${{ !(github.event_name == 'push' && github.ref == 'refs/heads/master') }}
-        runs-on: ubuntu-latest
-        # [remove for project] multi-PHP matrix is product-only; a project runs a
-        # single PHP version (8.5) — drop this whole `strategy` block for the project.
+        name: "Static analysis / PHP 8.0"
+        runs-on: ubuntu-20.04
         strategy:
             fail-fast: false
             matrix:
                 php-version: [
-                    '8.3',
-                    '8.5'
+                    '8.0',
+                    '8.1'
                 ]
 
         env:
             APPLICATION_ENV: ci.mysql
             APPLICATION_STORE: DE
             PROJECT: suite
-            SPRYKER_CURRENT_REGION: EU
-            COMPOSER_IGNORE_CHROMEDRIVER: 1
+
+        services:
+            redis:
+                image: redis
+                ports:
+                    - 6379/tcp
+                options: --health-cmd="redis-cli ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
         steps:
-            -   uses: actions/checkout@v4
+            - uses: actions/checkout@v3
 
-            -   uses: ramsey/composer-install@v3
-                with:
-                    composer-options: "-q --ignore-platform-reqs --no-interaction --prefer-install=auto"
+            - name: Configure sysctl limits
+              run: |
+                  sudo swapoff -a
+                  sudo sysctl -w vm.swappiness=1
+                  sudo sysctl -w fs.file-max=262144
+                  sudo sysctl -w vm.max_map_count=262144
 
-            -   name: Generate transfer objects
-                run: vendor/bin/console transfer:generate
+            - name: Runs Elasticsearch
+              uses: elastic/elastic-github-actions/elasticsearch@master
+              with:
+                  stack-version: 7.10.0
+                  port: 9200
 
-            -   name: Generate transfer databuilder objects
-                run: vendor/bin/console transfer:databuilder:generate
+            - uses: actions/setup-node@v3
+              with:
+                  node-version: '18'
 
-            -   name: Propel install
-                run: |
-                    vendor/bin/console propel:schema:copy
-                    vendor/bin/console propel:model:build
-                    vendor/bin/console transfer:entity:generate
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{ matrix.php-version }}
+                  extensions: mbstring, intl, pdo_mysql, redis
+                  tools: composer:v2
 
-            -   name: Codecept build
-                run: vendor/bin/codecept build -q
+            - name: Composer get cache directory
+              id: composer-cache
+              run: |
+                  echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
-            -   name: Generate autocompletion files
-                run: vendor/bin/console dev:ide-auto-completion:generate
+            - name: Composer cache
+              uses: actions/cache@v3
+              with:
+                  path: ${{ steps.composer-cache.outputs.dir }}
+                  key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+                  restore-keys: |
+                      ${{ runner.os }}-composer-
 
-            -   name: Setup search map files
-                run: vendor/bin/console search:setup:source-map
+            - name: Composer validate
+              run: composer validate
 
-            -   name: Validate propel files
-                run: |
-                    vendor/bin/console propel:schema:validate
-                    vendor/bin/console propel:schema:validate-xml-names
+            - name: Composer version
+              run: composer --version
 
-            -   name: Validate transfer files
-                run: vendor/bin/console transfer:validate
+            - name: Composer install
+              run: composer install
 
-            -   name: Run CodeStyle checks
-                run: vendor/bin/console code:sniff:style
+            - name: Generate transfer objects
+              run: vendor/bin/console transfer:generate
 
-            -   name: Run Architecture rules
-                run: vendor/bin/phpmd src/ text vendor/spryker/architecture-sniffer/src/ruleset.xml --minimumpriority 2
+            - name: Generate transfer databuilder objects
+              run: vendor/bin/console transfer:databuilder:generate
 
-            -   name: Run Project Architecture rules
-                run: vendor/bin/phpmd src/ text phpmd.xml --minimumpriority 4
+            - name: Propel install
+              run: |
+                  vendor/bin/console propel:schema:copy
+                  vendor/bin/console propel:model:build
+                  vendor/bin/console transfer:entity:generate
 
-            -   name: Generate rest API documentation
-                run: vendor/bin/console rest-api:generate:documentation
+            - name: Setup search
+              run: vendor/bin/console setup:search
 
-            -  name: Generate API
-               run: |
-                   echo "vendor/bin/glue api:generate" && vendor/bin/glue api:generate --quiet-meta --keep-existing
-                   echo "GLUE_APPLICATION=GLUE_BACKEND vendor/bin/glue api:generate" && GLUE_APPLICATION=GLUE_BACKEND vendor/bin/glue api:generate --quiet-meta --keep-existing
+            - name: Codecept build
+              run: vendor/bin/codecept build --ansi
 
-            -   name: Run PHPStan
-                run: vendor/bin/phpstan analyze -l 6 -c phpstan.neon src/
+            - name: Generate autocompletion files
+              run: vendor/bin/console dev:ide-auto-completion:generate
 
-            # [remove for project] release-* branch flow only; projects have no release branches.
-            -   name: Run Evaluator for release branches
-                run: vendor/bin/evaluator evaluate --format=compact
-                if: github.event.pull_request.base.ref == 'master' && startsWith(github.event.pull_request.head.ref, 'release-')
+            - name: Generate rest API dcoumentation
+              run: vendor/bin/console rest-api:generate:documentation
 
-            -   name: Run Evaluator project code checks
-                run: >-
-                    vendor/bin/evaluator evaluate --format=compact
-                    --exclude-checkers=DISCOURAGED_PACKAGES_CHECKER,MINIMUM_ALLOWED_SHOP_VERSION,NPM_CHECKER,OPEN_SOURCE_VULNERABILITIES_CHECKER,PHP_VERSION_CHECKER,SPRYKER_DEV_PACKAGES_CHECKER,SPRYKER_SECURITY_CHECKER
+            - name: Frontend install-dependencies
+              run: |
+                  vendor/bin/console frontend:project:install-dependencies -vvv
 
-            -   uses: actions/setup-node@v4
-                with:
-                    node-version: '24'
+            - name: Install NPM packages
+              run: |
+                  sudo npm i --location=global --unsafe-perm speccy@0.11.0
 
-            -   name: Install NPM packages
-                run: |
-                    sudo npm i --location=global --unsafe-perm speccy@0.11.0
+            - name: Speccy lint Glue specification
+              run: speccy lint src/Generated/Glue/Specification/spryker_rest_api.schema.yml --rules=default
 
-            -   name: Speccy lint Glue specification
-                run: speccy lint src/Generated/Glue/Specification/spryker_rest_api.schema.yml --rules=default --skip openapi-tags
+            - name: Style lint
+              run: npm run yves:stylelint
 
-            # [optional for project]
-            -   name: Slack Notification for failed job
-                uses: ./.github/actions/job-slack-notifications
-                if: always()
+            - name: ES lint
+              run: npm run yves:lint
 
-    # [project applicable] Frontend validation (lint, stylelint, formatter, MP unit tests).
-    js-validation:
-        name: "NPM validation"
-        runs-on: ubuntu-latest
-        steps:
-            -   uses: actions/checkout@v4
+            - name: Front-end Formatter
+              run: npm run formatter
 
-            -   uses: ramsey/composer-install@v3
-                with:
-                    composer-options: "-q --ignore-platform-reqs --no-interaction --prefer-install=auto"
+            - name: Front-end MP Lint
+              run: npm run mp:lint
 
-            -   name: Setup Node.js
-                uses: actions/setup-node@v5
-                with:
-                    node-version: '24'
-                    cache: 'npm'
+            - name: Front-end MP Style lint
+              run: npm run mp:stylelint
 
-            -   name: Install NPM packages
-                run: npm ci
+            - name: Front-end MP Unit Tests
+              run: npm run mp:test
 
-            -   name: Style lint
-                run: npm run yves:stylelint
+            - name: Validate propel files
+              run: |
+                  vendor/bin/console propel:schema:validate
+                  vendor/bin/console propel:schema:validate-xml-names
 
-            -   name: ES lint
-                run: npm run yves:lint
+            - name: Validate transfer files
+              run: vendor/bin/console transfer:validate
 
-            -   name: Front-end Formatter
-                run: npm run formatter
+            - name: Run CodeStyle checks
+              run: vendor/bin/console code:sniff:style
 
-            -   name: Front-end MP Lint
-                run: npm run mp:lint
+            - name: Run Architecture rules
+              run: vendor/bin/phpmd src/ text vendor/spryker/architecture-sniffer/src/ruleset.xml --minimumpriority 2
 
-            -   name: Front-end MP Style lint
-                run: npm run mp:stylelint
+            - name: Run PHPStan
+              run: vendor/bin/phpstan analyze -l 6 -c phpstan.neon src/
 
-            -   name: Front-end MP Unit Tests
-                run: npm run mp:test
+            - name: Run Evaluator
+              run: vendor/bin/evaluator evaluate
 
-            # [optional for project]
-            -   name: Slack Notification for failed job
-                uses: ./.github/actions/job-slack-notifications
-                if: always()
-
-    # Not draft-tiered: codeception always runs, so its dump must too.
-    build-db:
-        needs: [js-validation]
-        uses: ./.github/workflows/_build-db.yml
-        secrets: inherit
-
-    codeception:
-        needs: [js-validation, validation, build-db]
-        uses: ./.github/workflows/_codeception.yml
-        secrets: inherit
-
-    # [project applicable] Cypress Project tests: Lint & Format
-    cypress-quality-gate:
-        name: "Cypress-boilerplate / Lint & Format"
-        runs-on: ubuntu-latest
-        steps:
-            -   uses: actions/checkout@v4
-
-            -   name: Setup Node.js
-                uses: actions/setup-node@v5
-                with:
-                    node-version: '24'
-                    cache: 'npm'
-                    cache-dependency-path: tests/cypress-boilerplate/package-lock.json
-
-            -   name: Install Cypress project dependencies
-                working-directory: tests/cypress-boilerplate
-                run: npm ci
-
-            -   name: ES lint
-                working-directory: tests/cypress-boilerplate
-                run: npm run lint:check
-
-            -   name: Prettier check
-                working-directory: tests/cypress-boilerplate
-                run: npm run prettier:check
-
-            -   name: Slack Notification for failed job
-                uses: ./.github/actions/job-slack-notifications
-                if: always()
-
-    # [project applicable] Cypress Project tests run
-    cypress-e2e:
-        needs: [js-validation, validation, cypress-quality-gate]
-        name: "Cypress-boilerplate / E2E"
-        runs-on: ubuntu-latest
+    php-81-mariadb-glue-alpine:
+        name: "PHP 8.1 / MariaDB / Glue / Alpine"
+        runs-on: ubuntu-20.04
         env:
             PROGRESS_TYPE: plain
-            SPRYKER_PLATFORM_IMAGE: spryker/php:8.5
+            SPRYKER_PLATFORM_IMAGE: spryker/php:8.1
             TRAVIS: 1
-            SPRYKER_CURRENT_REGION: EU
-            DYNAMIC_STORE_MODE: true
 
         steps:
-            -   uses: actions/checkout@v4
+            - uses: actions/checkout@v3
 
-            -   uses: ramsey/composer-install@v3
-                with:
-                    composer-options: "-q --ignore-platform-reqs --optimize-autoloader --no-interaction --prefer-install=auto"
+            - name: Install apt-packages
+              run: |
+                  sudo apt-get install apache2-utils
 
-            -   name: Setup Node.js
-                uses: actions/setup-node@v5
-                with:
-                    node-version: '24'
-                    cache: 'npm'
-                    cache-dependency-path: tests/cypress-boilerplate/package-lock.json
+            - name: Install docker-compose
+              run: |
+                  sudo curl -L "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+                  sudo chmod +x /usr/local/bin/docker-compose
 
-            -   name: Install Cypress project dependencies
-                working-directory: tests/cypress-boilerplate
-                run: npm ci
+            - name: Run docker
+              run: |
+                  git clone https://github.com/spryker/docker-sdk.git ./docker
+                  docker/sdk boot deploy.ci.api.mariadb.yml -v
+                  docker/sdk up -t -v
+                  docker/sdk testing codecept fixtures
+                  docker/sdk testing console queue:worker:start --stop-when-empty
+                  docker/sdk testing codecept run -c codeception.api.yml
 
-            -   name: Run docker
-                run: |
-                    git clone https://github.com/spryker/docker-sdk.git ./docker && git -C ./docker fetch --depth 1 origin $(cat .git.docker) && git -C ./docker checkout $(cat .git.docker)
-                    docker/sdk boot .github/deploy/deploy.ci.acceptance.mariadb.cypress-boilerplate.yml
-                    sudo bash -c "echo '127.0.0.1 backend-api.eu.spryker.local backend-api.us.spryker.local backend-gateway.eu.spryker.local backend-gateway.us.spryker.local backoffice.eu.spryker.local backoffice.us.spryker.local glue-backend.eu.spryker.local glue-backend.us.spryker.local glue-storefront.eu.spryker.local glue-storefront.us.spryker.local glue.eu.spryker.local glue.us.spryker.local mail.spryker.local mp.eu.spryker.local mp.us.spryker.local queue.spryker.local spryker.local swagger.spryker.local yves.eu.spryker.local yves.us.spryker.local' >> /etc/hosts"
-                    docker/sdk up -t
-                    docker/sdk cli composer dump-autoload -o -a --apcu -q
 
-            -   name: Start queue worker
-                run: docker/sdk console queue:worker:start --stop-when-empty
+    php-81-postgresql-glue-alpine:
+        name: "PHP 8.1 / PostgreSQL / Glue / Alpine"
+        runs-on: ubuntu-20.04
+        env:
+            PROGRESS_TYPE: plain
+            SPRYKER_PLATFORM_IMAGE: spryker/php:8.1
+            TRAVIS: 1
 
-            -   name: Warm up merchant search index
-                run: |
-                    docker/sdk console sync:data merchant
-                    docker/sdk console queue:worker:start --stop-when-empty
+        steps:
+            - uses: actions/checkout@v3
 
-            -   name: Run Cypress E2E tests
-                id: cypress-tests
-                working-directory: tests/cypress-boilerplate
-                run: npx cypress run --env environment=ci --headless --browser chrome
+            - name: Install apt-packages
+              run: |
+                  sudo apt-get install apache2-utils
 
-            -   name: Upload Cypress artifacts
-                if: always() && steps.cypress-tests.outcome == 'failure'
-                uses: actions/upload-artifact@v5
-                with:
-                    name: cypress-e2e-failed-artifacts
-                    retention-days: 5
-                    path: |
-                        tests/cypress-boilerplate/cypress/data/screenshots/**/*
-                        tests/cypress-boilerplate/cypress/data/reports/**/*
+            - name: Install docker-compose
+              run: |
+                  sudo curl -L "https://github.com/docker/compose/releases/download/2.12.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+                  sudo chmod +x /usr/local/bin/docker-compose
 
-            -   name: Slack Notification for failed job
-                uses: ./.github/actions/job-slack-notifications
-                if: always()
+            - name: Run docker
+              run: |
+                  git clone https://github.com/spryker/docker-sdk.git ./docker
+                  docker/sdk boot deploy.ci.api.yml -v
+                  docker/sdk up -t -v
+                  docker/sdk testing codecept fixtures
+                  docker/sdk testing console queue:worker:start --stop-when-empty
+                  docker/sdk testing codecept run -c codeception.api.yml
 
-    # =========================================================================
-    # REMOVE FOR PROJECT — the reusable workflows called below are
-    # product-delivery / upstream maintenance suites (robot, cypress) and are
-    # NOT part of the project CI. Delete these calls when adopting this
-    # workflow for project work.
-    # =========================================================================
 
-    # [remove for project]
-    robot-api:
-        needs: [validation]
-        # Draft PRs skip the E2E tier; it runs on ready_for_review.
-        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.draft == false }}
-        uses: ./.github/workflows/_robot-api.yml
-        secrets: inherit
+    php-81-mariadb-acceptance-alpine:
+        name: "PHP 8.1 / MariaDB / Acceptance / Alpine"
+        runs-on: ubuntu-20.04
+        env:
+            PROGRESS_TYPE: plain
+            SPRYKER_PLATFORM_IMAGE: spryker/php:8.1
+            TRAVIS: 1
 
-    # [remove for project]
-    robot-ui:
-        needs: [js-validation, validation]
-        # Draft PRs skip the E2E tier; it runs on ready_for_review.
-        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.draft == false }}
-        uses: ./.github/workflows/_robot-ui.yml
-        secrets: inherit
+        steps:
+            - uses: actions/checkout@v3
 
-    # [remove for project]
-    cypress:
-        needs: [js-validation, validation]
-        # Draft PRs skip the E2E tier; it runs on ready_for_review.
-        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.draft == false }}
-        uses: ./.github/workflows/_cypress.yml
-        secrets: inherit
+            - name: Install apt-packages
+              run: |
+                  sudo apt-get install apache2-utils
+
+            - name: Install docker-compose
+              run: |
+                  sudo curl -L "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+                  sudo chmod +x /usr/local/bin/docker-compose
+
+            - name: Run docker
+              run: |
+                  git clone https://github.com/spryker/docker-sdk.git ./docker
+                  docker/sdk boot -v deploy.ci.acceptance.mariadb.yml
+                  docker/sdk up -t
+                  docker/sdk testing console queue:worker:start --stop-when-empty
+                  docker/sdk testing codecept run -c codeception.acceptance.yml
+
+
+    php-81-postgresql-acceptance-alpine:
+        name: "PHP 8.1 / PostgreSQL / Acceptance / Alpine"
+        runs-on: ubuntu-20.04
+        env:
+            PROGRESS_TYPE: plain
+            SPRYKER_PLATFORM_IMAGE: spryker/php:8.1
+            TRAVIS: 1
+
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: Install apt-packages
+              run: |
+                  sudo apt-get install apache2-utils
+
+            - name: Install docker-compose
+              run: |
+                  sudo curl -L "https://github.com/docker/compose/releases/download/2.12.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+                  sudo chmod +x /usr/local/bin/docker-compose
+
+            - name: Run docker
+              run: |
+                  git clone https://github.com/spryker/docker-sdk.git ./docker
+                  docker/sdk boot -v deploy.ci.acceptance.yml
+                  docker/sdk up -t
+                  docker/sdk testing console queue:worker:start --stop-when-empty
+                  docker/sdk testing codecept run -c codeception.acceptance.yml
+
+
+    php-81-mariadb-functional-alpine:
+        name: "PHP 8.1 / MariaDB / Functional / Alpine"
+        runs-on: ubuntu-20.04
+        env:
+            PROGRESS_TYPE: plain
+            SPRYKER_PLATFORM_IMAGE: spryker/php:8.1
+            TRAVIS: 1
+
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: Install apt-packages
+              run: |
+                  sudo apt-get install apache2-utils
+
+            - name: Install docker-compose
+              run: |
+                  sudo curl -L "https://github.com/docker/compose/releases/download/2.12.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+                  sudo chmod +x /usr/local/bin/docker-compose
+
+            - name: Run docker
+              run: |
+                  git clone https://github.com/spryker/docker-sdk.git ./docker
+                  docker/sdk boot deploy.ci.functional.mariadb.yml -v
+                  docker/sdk up -t -v
+                  docker/sdk testing codecept run -c codeception.functional.yml
+
+
+    php-81-postgresql-functional-alpine:
+        name: "PHP 8.1 / PostgreSQL / Functional / Alpine"
+        runs-on: ubuntu-20.04
+        env:
+            PROGRESS_TYPE: plain
+            SPRYKER_PLATFORM_IMAGE: spryker/php:8.1
+            TRAVIS: 1
+
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: Install apt-packages
+              run: |
+                  sudo apt-get install apache2-utils
+
+            - name: Install docker-compose
+              run: |
+                  sudo curl -L "https://github.com/docker/compose/releases/download/2.12.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+                  sudo chmod +x /usr/local/bin/docker-compose
+
+            - name: Run docker
+              run: |
+                  git clone https://github.com/spryker/docker-sdk.git ./docker
+                  docker/sdk boot -v deploy.ci.functional.yml
+                  docker/sdk up -t
+                  docker/sdk testing console queue:worker:start --stop-when-empty
+                  docker/sdk testing codecept run -c codeception.functional.yml
+
+
+    php-80-mariadb-glue-alpine:
+        name: "PHP 8.0 / MariaDB / Glue / Alpine"
+        runs-on: ubuntu-20.04
+        env:
+            PROGRESS_TYPE: plain
+            SPRYKER_PLATFORM_IMAGE: spryker/php:8.0
+            TRAVIS: 1
+
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: Install apt-packages
+              run: |
+                  sudo apt-get install apache2-utils
+
+            - name: Install docker-compose
+              run: |
+                  sudo curl -L "https://github.com/docker/compose/releases/download/2.12.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+                  sudo chmod +x /usr/local/bin/docker-compose
+
+            - name: Run docker
+              run: |
+                  git clone https://github.com/spryker/docker-sdk.git ./docker
+                  docker/sdk boot deploy.ci.api.mariadb.yml -v
+                  docker/sdk up -t -v
+                  docker/sdk testing codecept fixtures
+                  docker/sdk testing console queue:worker:start --stop-when-empty
+                  docker/sdk testing codecept run -c codeception.api.yml
+
+    php-80-postgresql-acceptance-alpine:
+        name: "PHP 8.0 / PostgreSQL / Acceptance / Alpine"
+        runs-on: ubuntu-20.04
+        env:
+            PROGRESS_TYPE: plain
+            SPRYKER_PLATFORM_IMAGE: spryker/php:8.0
+            TRAVIS: 1
+
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: Install apt-packages
+              run: |
+                  sudo apt-get install apache2-utils
+
+            - name: Install docker-compose
+              run: |
+                  sudo curl -L "https://github.com/docker/compose/releases/download/2.12.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+                  sudo chmod +x /usr/local/bin/docker-compose
+
+            - name: Run docker
+              run: |
+                  git clone https://github.com/spryker/docker-sdk.git ./docker
+                  docker/sdk boot -v deploy.ci.acceptance.yml
+                  docker/sdk up -t
+                  docker/sdk testing console queue:worker:start --stop-when-empty
+                  docker/sdk testing codecept run -c codeception.acceptance.yml
+
+
+    php-80-postgresql-functional-alpine:
+        name: "PHP 8.0 / PostgreSQL / Functional / Alpine"
+        runs-on: ubuntu-20.04
+        env:
+            PROGRESS_TYPE: plain
+            SPRYKER_PLATFORM_IMAGE: spryker/php:8.0
+            TRAVIS: 1
+
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: Install apt-packages
+              run: |
+                  sudo apt-get install apache2-utils
+
+            - name: Install docker-compose
+              run: |
+                  sudo curl -L "https://github.com/docker/compose/releases/download/2.12.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+                  sudo chmod +x /usr/local/bin/docker-compose
+
+            - name: Run docker
+              run: |
+                  git clone https://github.com/spryker/docker-sdk.git ./docker
+                  docker/sdk boot -v deploy.ci.acceptance.yml
+                  docker/sdk up -t
+                  docker/sdk testing console queue:worker:start --stop-when-empty
+                  docker/sdk testing codecept run -c codeception.functional.yml
+
+    php-80-mariadb-acceptance-alpine:
+        name: "PHP 8.0 / MariaDB / Acceptance / Alpine"
+        runs-on: ubuntu-20.04
+        env:
+            PROGRESS_TYPE: plain
+            SPRYKER_PLATFORM_IMAGE: spryker/php:8.0
+            TRAVIS: 1
+
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: Install apt-packages
+              run: |
+                  sudo apt-get install apache2-utils
+
+            - name: Install docker-compose
+              run: |
+                  sudo curl -L "https://github.com/docker/compose/releases/download/2.12.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+                  sudo chmod +x /usr/local/bin/docker-compose
+
+            - name: Run docker
+              run: |
+                  git clone https://github.com/spryker/docker-sdk.git ./docker
+                  docker/sdk boot -v deploy.ci.acceptance.mariadb.yml
+                  docker/sdk up -t
+                  docker/sdk testing console queue:worker:start --stop-when-empty
+                  docker/sdk testing codecept run -c codeception.acceptance.yml
+
+
+    php-80-mariadb-functional-alpine:
+        name: "PHP 8.0 / MariaDB / Functional / Alpine"
+        runs-on: ubuntu-20.04
+        env:
+            PROGRESS_TYPE: plain
+            SPRYKER_PLATFORM_IMAGE: spryker/php:8.0
+            TRAVIS: 1
+
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: Install apt-packages
+              run: |
+                  sudo apt-get install apache2-utils
+
+            - name: Install docker-compose
+              run: |
+                  sudo curl -L "https://github.com/docker/compose/releases/download/2.12.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+                  sudo chmod +x /usr/local/bin/docker-compose
+
+            - name: Run docker
+              run: |
+                  git clone https://github.com/spryker/docker-sdk.git ./docker
+                  docker/sdk boot deploy.ci.functional.mariadb.yml -v
+                  docker/sdk up -t -v
+                  docker/sdk testing codecept run -c codeception.functional.yml
+
+
+    php-80-postgres-functional-debian:
+        name: "PHP 8.0 / PostgreSQL / Functional / Debian"
+        runs-on: ubuntu-20.04
+        env:
+            PROGRESS_TYPE: plain
+            SPRYKER_PLATFORM_IMAGE: spryker/php:8.0-debian
+            TRAVIS: 1
+
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: Install apt-packages
+              run: |
+                  sudo apt-get install apache2-utils
+
+            - name: Install docker-compose
+              run: |
+                  sudo curl -L "https://github.com/docker/compose/releases/download/2.12.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+                  sudo chmod +x /usr/local/bin/docker-compose
+
+            - name: Run docker
+              run: |
+                  git clone https://github.com/spryker/docker-sdk.git ./docker
+                  docker/sdk boot deploy.ci.functional.yml -v
+                  docker/sdk up -t -v
+                  docker/sdk testing codecept run -c codeception.functional.yml
+
+    frontend-assets-via-docker-php-8-0:
+        name: "Docker / Alpine / PHP 8.0 / Frontend & Assets"
+        runs-on: ubuntu-20.04
+        env:
+            PROGRESS_TYPE: plain
+            SPRYKER_PLATFORM_IMAGE: spryker/php:8.0
+        steps:
+            - uses: actions/checkout@v3
+            - run: echo eyAiZXhwZXJpbWVudGFsIiA6IHRydWUsICJmZWF0dXJlcyIgOiB7ICJidWlsZGtpdCI6IHRydWUgfSB9Cg==|base64 -d|sudo tee /etc/docker/daemon.json
+            - run: sudo apt-get install --only-upgrade docker -y
+            - run: sudo curl -L "https://github.com/docker/compose/releases/download/2.12.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+            - run: sudo chmod +x /usr/local/bin/docker-compose
+            - run: git clone https://github.com/spryker/docker-sdk.git --single-branch --branch master ./docker
+            - run: docker/sdk boot deploy.yml
+            - run: SPRYKER_BUILD_HASH=myhash docker/sdk export images
+            - run: docker run -t --rm -e SPRYKER_NGINX_CGI_HOST_YVES_EU=localhost -e SPRYKER_NGINX_CGI_HOST_ZED_EU=localhost -e SPRYKER_NGINX_CGI_HOST_GLUE_EU=localhost -e SPRYKER_NGINX_CGI_HOST_YVES_US=localhost -e SPRYKER_NGINX_CGI_HOST_GLUE_US=localhost -e SPRYKER_NGINX_CGI_HOST_ZED_US=localhost -e ALLOWED_IP=127.0.0.1 spryker_b2b_marketplace_frontend:1.0-frontend nginx -t
+            - run: docker run -t --rm --entrypoint='' spryker_b2b_marketplace_frontend:1.0-frontend ls -al /data/public/Yves/assets/myhash
+            - run: docker run -t --rm --entrypoint='' spryker_b2b_marketplace_frontend:1.0-frontend ls -al /data/public/Zed/assets/
+
+    docker-alpine-php-8-0-mariadb-robot:
+        name: "Docker / Alpine / PHP 8.0 / MariaDB / Robot"
+        runs-on: ubuntu-20.04
+        env:
+            PROGRESS_TYPE: plain
+            SPRYKER_PLATFORM_IMAGE: spryker/php:8.0
+            TRAVIS: 1
+            ROBOT_TESTS_ARTIFACTS_BUCKET_REGION: eu-west-1
+        steps:
+            - uses: actions/checkout@v3
+
+            - uses: actions/setup-python@v4
+              with:
+                  python-version: '3.9'
+
+            - name: Install packages
+              run: |
+                  sudo apt-get update
+                  sudo apt-get install apache2-utils
+                  sudo apt install awscli -q
+                  python3 -m pip install --upgrade pip
+                  python3 -m pip install -U robotframework
+                  python3 -m pip install -U robotframework-requests
+                  python3 -m pip install -U robotframework-jsonlibrary
+                  python3 -m pip install -U robotframework-databaselibrary
+                  python3 -m pip install PyMySQL
+            - name: Install docker-compose
+              run: |
+                  sudo curl -L "https://github.com/docker/compose/releases/download/2.12.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+                  sudo chmod +x /usr/local/bin/docker-compose
+            - name: Install Robot tests
+              run: |
+                  git clone https://github.com/spryker/robotframework-suite-tests.git --single-branch --branch master robotframework-tests
+            - name: Install Project
+              continue-on-error: true
+              run: |
+                  git clone https://github.com/spryker/docker-sdk.git ./docker
+                  docker/sdk boot -v deploy.ci.acceptance.mariadb.yml
+                  docker/sdk up -t -v
+                  docker/sdk testing console queue:worker:start --stop-when-empty
+                  sudo bash -c "echo '127.0.0.1 backend-api.at.spryker.local backend-api.de.spryker.local backend-gateway.at.spryker.local backend-gateway.de.spryker.local backoffice.at.spryker.local backoffice.de.spryker.local date-time-configurator-example.spryker.local glue.at.spryker.local glue.de.spryker.local yves.at.spryker.local yves.de.spryker.local' >> /etc/hosts"
+            - name: Run Tests
+              run: |
+                  cd robotframework-tests
+                  robot -v env:api_mp_b2b --exclude skip-due-to-issueORskip-due-to-refactoring -d results -s tests.api.mp_b2b.glue .
+            - name: Upload artifacts
+              if: always()
+              run: |
+                  AWS_DEFAULT_REGION=${{env.ROBOT_TESTS_ARTIFACTS_BUCKET_REGION}} AWS_ACCESS_KEY_ID=${{ secrets.ROBOT_TESTS_ARTIFACTS_KEY }} AWS_SECRET_ACCESS_KEY=${{ secrets.ROBOT_TESTS_ARTIFACTS_SECRET }} aws s3 cp robotframework-tests/results s3://${{vars.ROBOT_TESTS_ARTIFACTS_BUCKET}}/b2b-mp-robot-api-ci/${GITHUB_RUN_ID}/PHP8.0MariaDBRobot/ \
+                    --recursive \
+                    --expires "$(date -d '+7 days' --utc +'%Y-%m-%dT%H:%M:%SZ')"
+
+    docker-alpine-php-8-1-postgresql-robot:
+        name: "Docker / Alpine / PHP 8.1 / PostgreSQL / Robot"
+        runs-on: ubuntu-20.04
+        env:
+            PROGRESS_TYPE: plain
+            SPRYKER_PLATFORM_IMAGE: spryker/php:8.1
+            TRAVIS: 1
+            ROBOT_TESTS_ARTIFACTS_BUCKET_REGION: eu-west-1
+        steps:
+            - uses: actions/checkout@v3
+
+            - uses: actions/setup-python@v4
+              with:
+                  python-version: '3.9'
+
+            - name: Install packages
+              run: |
+                  sudo apt-get update
+                  sudo apt-get install apache2-utils
+                  sudo apt install awscli -q
+                  python3 -m pip install --upgrade pip
+                  python3 -m pip install -U robotframework
+                  python3 -m pip install -U robotframework-requests
+                  python3 -m pip install -U robotframework-jsonlibrary
+                  python3 -m pip install -U robotframework-databaselibrary
+                  python3 -m pip install psycopg2-binary
+            - name: Install docker-compose
+              run: |
+                  sudo curl -L "https://github.com/docker/compose/releases/download/2.12.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+                  sudo chmod +x /usr/local/bin/docker-compose
+            - name: Install Robot tests
+              run: |
+                  git clone https://github.com/spryker/robotframework-suite-tests.git --single-branch --branch master robotframework-tests
+            - name: Install Project
+              continue-on-error: true
+              run: |
+                  git clone https://github.com/spryker/docker-sdk.git ./docker
+                  docker/sdk boot -v deploy.ci.acceptance.yml
+                  docker/sdk up -t -v
+                  docker/sdk testing console queue:worker:start --stop-when-empty
+                  sudo bash -c "echo '127.0.0.1 backend-api.at.spryker.local backend-api.de.spryker.local backend-gateway.at.spryker.local backend-gateway.de.spryker.local backoffice.at.spryker.local backoffice.de.spryker.local date-time-configurator-example.spryker.local glue.at.spryker.local glue.de.spryker.local yves.at.spryker.local yves.de.spryker.local' >> /etc/hosts"
+            - name: Run Tests
+              run: |
+                  cd robotframework-tests
+                  robot -v env:api_mp_b2b -v db_engine:psycopg2 --exclude skip-due-to-issueORskip-due-to-refactoring -d results -s tests.api.mp_b2b.glue .
+            - name: Upload artifacts
+              if: always()
+              run: |
+                  AWS_DEFAULT_REGION=${{env.ROBOT_TESTS_ARTIFACTS_BUCKET_REGION}} AWS_ACCESS_KEY_ID=${{ secrets.ROBOT_TESTS_ARTIFACTS_KEY }} AWS_SECRET_ACCESS_KEY=${{ secrets.ROBOT_TESTS_ARTIFACTS_SECRET }} aws s3 cp robotframework-tests/results s3://${{vars.ROBOT_TESTS_ARTIFACTS_BUCKET}}/b2b-mp-robot-api-ci/${GITHUB_RUN_ID}/PHP8.1PostgreSQLRobot/ \
+                    --recursive \
+                    --expires "$(date -d '+7 days' --utc +'%Y-%m-%dT%H:%M:%SZ')"
