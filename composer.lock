@@ -29352,16 +29352,16 @@
         },
         {
             "name": "spryker/category",
-            "version": "5.26.4",
+            "version": "5.26.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker/category.git",
-                "reference": "a28df680b58f7156ff450b3433510e295a46db0d"
+                "reference": "f27351c47027035f362d90fca916b56aa900591a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker/category/zipball/a28df680b58f7156ff450b3433510e295a46db0d",
-                "reference": "a28df680b58f7156ff450b3433510e295a46db0d",
+                "url": "https://api.github.com/repos/spryker/category/zipball/f27351c47027035f362d90fca916b56aa900591a",
+                "reference": "f27351c47027035f362d90fca916b56aa900591a",
                 "shasum": ""
             },
             "require": {
@@ -29411,9 +29411,9 @@
             ],
             "description": "Category module",
             "support": {
-                "source": "https://github.com/spryker/category/tree/5.26.4"
+                "source": "https://github.com/spryker/category/tree/5.26.5"
             },
-            "time": "2026-09-16T10:54:40+00:00"
+            "time": "2026-09-21T10:54:02+00:00"
         },
         {
             "name": "spryker/category-data-feed",
@@ -42214,16 +42214,16 @@
         },
         {
             "name": "spryker/glossary",
-            "version": "3.22.0",
+            "version": "3.22.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker/glossary.git",
-                "reference": "db20c6480d812f78c87a6654a77fc5b4cf3c1cd7"
+                "reference": "e672497e97f5866393b81220576e96a4d5acce0a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker/glossary/zipball/db20c6480d812f78c87a6654a77fc5b4cf3c1cd7",
-                "reference": "db20c6480d812f78c87a6654a77fc5b4cf3c1cd7",
+                "url": "https://api.github.com/repos/spryker/glossary/zipball/e672497e97f5866393b81220576e96a4d5acce0a",
+                "reference": "e672497e97f5866393b81220576e96a4d5acce0a",
                 "shasum": ""
             },
             "require": {
@@ -42282,9 +42282,9 @@
             ],
             "description": "Glossary module",
             "support": {
-                "source": "https://github.com/spryker/glossary/tree/3.22.0"
+                "source": "https://github.com/spryker/glossary/tree/3.22.1"
             },
-            "time": "2026-09-15T11:03:12+00:00"
+            "time": "2026-09-21T10:54:02+00:00"
         },
         {
             "name": "spryker/glossary-storage",
