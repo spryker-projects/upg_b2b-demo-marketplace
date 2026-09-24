@@ -26090,16 +26090,16 @@
         },
         {
             "name": "spryker/api-platform",
-            "version": "1.38.0",
+            "version": "1.39.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker/api-platform.git",
-                "reference": "0ad0383914f59a1cf60b90031a467893800078e4"
+                "reference": "e8b1736e10a05b623399af40ca77307768a7c8db"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker/api-platform/zipball/0ad0383914f59a1cf60b90031a467893800078e4",
-                "reference": "0ad0383914f59a1cf60b90031a467893800078e4",
+                "url": "https://api.github.com/repos/spryker/api-platform/zipball/e8b1736e10a05b623399af40ca77307768a7c8db",
+                "reference": "e8b1736e10a05b623399af40ca77307768a7c8db",
                 "shasum": ""
             },
             "require": {
@@ -26182,9 +26182,9 @@
                 "spryker"
             ],
             "support": {
-                "source": "https://github.com/spryker/api-platform/tree/1.38.0"
+                "source": "https://github.com/spryker/api-platform/tree/1.39.0"
             },
-            "time": "2026-09-23T15:22:56+00:00"
+            "time": "2026-09-23T15:55:03+00:00"
         },
         {
             "name": "spryker/app-catalog-gui",
@@ -42351,16 +42351,16 @@
         },
         {
             "name": "spryker/glue-application",
-            "version": "1.78.1",
+            "version": "1.79.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker/glue-application.git",
-                "reference": "99fb9c16c1e7eca9e2c67e230fdfa09957fd414f"
+                "reference": "a9d53567607ef9260176ad29a1ebcd0d4b40bdad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker/glue-application/zipball/99fb9c16c1e7eca9e2c67e230fdfa09957fd414f",
-                "reference": "99fb9c16c1e7eca9e2c67e230fdfa09957fd414f",
+                "url": "https://api.github.com/repos/spryker/glue-application/zipball/a9d53567607ef9260176ad29a1ebcd0d4b40bdad",
+                "reference": "a9d53567607ef9260176ad29a1ebcd0d4b40bdad",
                 "shasum": ""
             },
             "require": {
@@ -42415,9 +42415,9 @@
             ],
             "description": "GlueApplication module",
             "support": {
-                "source": "https://github.com/spryker/glue-application/tree/1.78.1"
+                "source": "https://github.com/spryker/glue-application/tree/1.79.0"
             },
-            "time": "2026-09-23T15:22:56+00:00"
+            "time": "2026-09-23T15:55:03+00:00"
         },
         {
             "name": "spryker/glue-application-authorization-connector",
@@ -63327,16 +63327,16 @@
         },
         {
             "name": "spryker/product-option",
-            "version": "8.27.0",
+            "version": "8.28.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker/product-option.git",
-                "reference": "b1e9f7c0b1fdff93cf4d3145876cf1a392e423d6"
+                "reference": "ffc383f918f36eb551f4307dc4e9fa191a3b543a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker/product-option/zipball/b1e9f7c0b1fdff93cf4d3145876cf1a392e423d6",
-                "reference": "b1e9f7c0b1fdff93cf4d3145876cf1a392e423d6",
+                "url": "https://api.github.com/repos/spryker/product-option/zipball/ffc383f918f36eb551f4307dc4e9fa191a3b543a",
+                "reference": "ffc383f918f36eb551f4307dc4e9fa191a3b543a",
                 "shasum": ""
             },
             "require": {
@@ -63410,9 +63410,9 @@
             ],
             "description": "ProductOption module",
             "support": {
-                "source": "https://github.com/spryker/product-option/tree/8.27.0"
+                "source": "https://github.com/spryker/product-option/tree/8.28.0"
             },
-            "time": "2026-09-15T07:32:35+00:00"
+            "time": "2026-09-23T15:55:03+00:00"
         },
         {
             "name": "spryker/product-option-cart-connector",
@@ -66626,16 +66626,16 @@
         },
         {
             "name": "spryker/quote-checkout-connector",
-            "version": "1.0.1",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker/quote-checkout-connector.git",
-                "reference": "a23732d1611cf9d899d4887694da57b8c393affb"
+                "reference": "186c6a5c92c1017a680cf328534b076430bc1f72"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker/quote-checkout-connector/zipball/a23732d1611cf9d899d4887694da57b8c393affb",
-                "reference": "a23732d1611cf9d899d4887694da57b8c393affb",
+                "url": "https://api.github.com/repos/spryker/quote-checkout-connector/zipball/186c6a5c92c1017a680cf328534b076430bc1f72",
+                "reference": "186c6a5c92c1017a680cf328534b076430bc1f72",
                 "shasum": ""
             },
             "require": {
@@ -66668,9 +66668,9 @@
             ],
             "description": "QuoteCheckoutConnector module",
             "support": {
-                "source": "https://github.com/spryker/quote-checkout-connector/tree/1.0.1"
+                "source": "https://github.com/spryker/quote-checkout-connector/tree/1.1.0"
             },
-            "time": "2026-08-20T09:06:27+00:00"
+            "time": "2026-09-23T15:55:03+00:00"
         },
         {
             "name": "spryker/quote-extension",
@@ -67630,16 +67630,16 @@
         },
         {
             "name": "spryker/sales",
-            "version": "11.84.1",
+            "version": "11.85.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker/sales.git",
-                "reference": "d63e77a3eef8af0cf89a40d0fafa57f8e22fe07b"
+                "reference": "5309385aa45996496e567a05015efd1f34cbfefe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker/sales/zipball/d63e77a3eef8af0cf89a40d0fafa57f8e22fe07b",
-                "reference": "d63e77a3eef8af0cf89a40d0fafa57f8e22fe07b",
+                "url": "https://api.github.com/repos/spryker/sales/zipball/5309385aa45996496e567a05015efd1f34cbfefe",
+                "reference": "5309385aa45996496e567a05015efd1f34cbfefe",
                 "shasum": ""
             },
             "require": {
@@ -67710,9 +67710,9 @@
             ],
             "description": "Sales module",
             "support": {
-                "source": "https://github.com/spryker/sales/tree/11.84.1"
+                "source": "https://github.com/spryker/sales/tree/11.85.0"
             },
-            "time": "2026-09-14T12:38:19+00:00"
+            "time": "2026-09-23T15:55:03+00:00"
         },
         {
             "name": "spryker/sales-configurable-bundle",
